@@ -1,0 +1,112 @@
+{
+  "info": {
+    "name": "music-api Sprint 1",
+    "_postman_id": "00000000-0000-0000-0000-000000000000",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Criar Cliente",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "http://localhost:8080/api/clientes",
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"nome\": \"Yuri\" }"
+        }
+      }
+    },
+    {
+      "name": "Listar Clientes",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:8080/api/clientes"
+      }
+    },
+    {
+      "name": "Criar Cantor",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "http://localhost:8080/api/cantores",
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"nome\":\"Ana\", \"email\":\"ana@mmusic.com\", \"senha\":\"1234\" }"
+        }
+      }
+    },
+    {
+      "name": "Listar Cantores",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:8080/api/cantores"
+      }
+    },
+    {
+      "name": "Criar M\u00fasica",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "http://localhost:8080/api/musicas",
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"titulo\":\"Tempo Bom\",\"artista\":\"Ana\",\"genero\":\"Pop\",\"cantorId\":1 }"
+        }
+      }
+    },
+    {
+      "name": "Listar M\u00fasicas",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:8080/api/musicas"
+      }
+    },
+    {
+      "name": "Buscar M\u00fasica por T\u00edtulo",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:8080/api/musicas/search?q=tempo"
+      }
+    },
+    {
+      "name": "Criar Pedido",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "http://localhost:8080/api/pedidos",
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"clienteId\":1, \"musicaId\":1 }"
+        }
+      }
+    },
+    {
+      "name": "Listar Pedidos",
+      "request": {
+        "method": "GET",
+        "url": "http://localhost:8080/api/pedidos"
+      }
+    }
+  ]
+}
