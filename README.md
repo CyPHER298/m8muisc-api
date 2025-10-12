@@ -66,7 +66,9 @@ Desenvolvedor IOT (Arduino) / Banco de Dados (OracleSQL) |
 
 4. **Executar o projeto:**
    ```bash
+   mvn clean install
    mvn spring-boot:run
+
    ```
 
 5. **Acessar a documentação Swagger:**
