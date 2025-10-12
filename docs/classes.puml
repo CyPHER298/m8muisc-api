@@ -1,8 +1,0 @@
-@startuml
-class Cliente { Long id; String nome }
-class Cantor { Long id; String nome; String email; String senha }
-class Musica { Long id; String titulo; String artista; String genero }
-class Pedido { Long id }
-Pedido --> Cliente : cliente (ManyToOne)
-Pedido --> Musica : musica (ManyToOne)
-@enduml
