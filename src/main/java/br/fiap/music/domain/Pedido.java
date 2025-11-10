@@ -16,11 +16,11 @@ public class Pedido {
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "ID_CLIENTE", nullable = false,
-        foreignKey = @ForeignKey(name = "FK_PEDIDO_CLIENTE"))
+            foreignKey = @ForeignKey(name = "FK_PEDIDO_CLIENTE"))
     private Cliente cliente;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "ID_MUSICA", nullable = false,
-        foreignKey = @ForeignKey(name = "FK_PEDIDO_MUSICA"))
+            foreignKey = @ForeignKey(name = "FK_PEDIDO_MUSICA"))
     private Musica musica;
 }

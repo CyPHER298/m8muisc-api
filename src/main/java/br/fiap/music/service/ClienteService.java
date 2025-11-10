@@ -3,9 +3,12 @@ package br.fiap.music.service;
 import br.fiap.music.gateways.dto.ClienteDTO;
 import br.fiap.music.domain.Cliente;
 import br.fiap.music.gateways.ClienteRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -13,38 +16,56 @@ import java.util.List;
 public class ClienteService {
     private final ClienteRepository repo;
 
-    private ClienteDTO toDTO(Cliente c){
-        return new ClienteDTO(c.getId(), c.getNome());
-    }
-    private void apply(Cliente c, ClienteDTO d){
-        c.setNome(d.nome());
+    @Transactional
+    public ClienteDTO create(ClienteDTO dto) {
+
+        Cliente cliente = new Cliente();
+        cliente.setId(dto.id());
+        cliente.setNome(dto.nome());
+
+        repo.save(cliente);
+
+        return ClienteDTO.builder().id(cliente.getId()).nome(dto.nome()).build();
     }
 
-    public ClienteDTO create(ClienteDTO dto){
-        Cliente c = new Cliente();
-        apply(c, dto);
-        return toDTO(repo.save(c));
+    public List<ClienteDTO> list() {
+        List<Cliente> clientes = repo.findAll();
+
+        ArrayList<ClienteDTO> list = new ArrayList<>();
+
+        clientes.forEach((cliente) -> {
+            list.add(ClienteDTO.builder()
+                    .id(cliente.getId())
+                    .nome(cliente.getNome())
+                    .build());
+        });
+
+        return list;
     }
 
-    public List<ClienteDTO> list(){
-        return repo.findAll().stream().map(this::toDTO).toList();
+    public Cliente get(Long id) {
+        return repo.findById(id).orElse(null);
     }
 
-    public ClienteDTO get(Long id){
-        return toDTO(getEntity(id));
+    public Cliente update(@Valid Long id, @Valid ClienteDTO dto) {
+        Cliente cliente = repo.findById(id).orElse(null);
+        assert cliente != null;
+        cliente.setNome(dto.nome());
+        return repo.save(cliente);
+
     }
 
-    public ClienteDTO update(Long id, ClienteDTO dto){
-        Cliente c = getEntity(id);
-        apply(c, dto);
-        return toDTO(repo.save(c));
+    @Transactional
+    public Cliente delete(Long id) {
+        Cliente cliente = repo.findById(id).orElse(null);
+
+        assert cliente != null;
+        repo.delete(cliente);
+
+        return cliente;
     }
 
-    public void delete(Long id){
-        repo.delete(getEntity(id));
-    }
-
-    public Cliente getEntity(Long id){
+    public Cliente getEntity(Long id) {
         return repo.findById(id).orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
     }
 }

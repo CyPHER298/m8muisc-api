@@ -25,12 +25,12 @@ Desenvolvedor IOT (Arduino) / Banco de Dados (OracleSQL) |
 
 | Etapa | Atividade                                            | Responsável                        | Prazo      | Status      |
 |-------|------------------------------------------------------|------------------------------------|------------|-------------|
-| 1     | Definição do escopo e divisão das tarefas            | Julia                              | 29/09/2025 | ✅ Concluído |
-| 2     | Modelagem das entidades e criação do banco OracleSQL | Felipe                             | 02/10/2025 | ✅ Concluído |
-| 3     | Implementação dos controllers e rotas da API         | Julia                              | 08/10/2025 | ✅ Concluído |
-| 4     | Integração com o banco de dados                      | Henrique                           | 10/10/2025 | ✅ Concluído |
-| 5     | Documentação dos endpoints (Swagger)                 | Julia                              | 11/10/2025 | ✅ Concluído |
-| 6     | Gravação e entrega Sprint 1                          | Henrique (Somente o líder entrega) | 11/10/2025 | ✅ Concluído |
+| 1     | Coordenação de atividades                            | Julia                              | 09/11/2025 | ✅ Concluído |
+| 2     | Correção e aplicação do banco de dados para API Java | Felipe                             | 09/11/2025 | ✅ Concluído |
+| 3     | Documentação da API e testes                         | Julia                              | 09/11/2025 | ✅ Concluído |
+| 4     | Integração com o banco de dados OracleSQL            | Henrique                           | 09/11/2025 | ✅ Concluído |
+| 5     | Adequação e http response para controllers           | Henrique                           | 09/11/2025 | ✅ Concluído |
+| 6     | Gravação e entrega Sprint 2                          | Henrique (Somente o líder entrega) | 09/11/2025 | ✅ Concluído |
 
 ---
 
@@ -82,7 +82,11 @@ Desenvolvedor IOT (Arduino) / Banco de Dados (OracleSQL) |
 
 ### 🗃️ Diagrama de Classes
 
-![Diagrama de Classes](./docs/der_bd.jpeg)
+**MER**
+![Diagrama de Entidade Relacionamento](./docs/der_bd.jpeg)
+
+**DER**
+![Modelo de Entidade Relacionamento](./docs/mer_bd.jpeg)
 
 ---
 
@@ -139,3 +143,57 @@ O vídeo apresenta:
 ## 📜 **Observação**
 
 Este projeto foi desenvolvido para fins acadêmicos na disciplina de **Desenvolvimento Web — Sprint 1 (Java)**.
+
+---
+
+## 📈 **Avanço**
+
+Desde a primeira sprint a aplicação teve adequação de rotas com HATEOAS e resposta HTTP para endpoints.
+Conexão com banco de dados ORACLE foi mantida corretamente. 
+
+*Segue o script para criação das tabelas caso não esteja
+sendo possível realizar as trocas de informações:*
+
+```
+DROP TABLE avaliacao CASCADE CONSTRAINTS;
+DROP TABLE pedido CASCADE CONSTRAINTS;
+DROP TABLE musica CASCADE CONSTRAINTS;
+DROP TABLE cantor CASCADE CONSTRAINTS;
+DROP TABLE cliente CASCADE CONSTRAINTS;
+
+CREATE TABLE cliente (
+  id_cliente NUMBER(2) GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  nm_cliente VARCHAR2(50) NOT NULL
+);
+
+CREATE TABLE cantor (
+  id_cantor NUMBER(2) GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  nm_cantor VARCHAR2(50) NOT NULL,
+  senha_cantor VARCHAR2(10),
+  email_cantor VARCHAR2(50) UNIQUE
+);
+
+CREATE TABLE musica (
+  id_musica NUMBER(2) GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  titulo VARCHAR2(50) NOT NULL,
+  artista VARCHAR2(50),
+  genero VARCHAR2(50)
+);
+
+CREATE TABLE pedido (
+  id_pedido NUMBER(2) GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  id_cliente NUMBER(2) NOT NULL,
+  id_musica NUMBER(2) NOT NULL,
+  FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente),
+  FOREIGN KEY (id_musica) REFERENCES musica(id_musica)
+);
+
+CREATE TABLE avaliacao (
+  id_avaliacao NUMBER(2) GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  nota NUMBER CONSTRAINT chk_nota CHECK (nota BETWEEN 1 AND 5),
+  id_musica NUMBER(2) NOT NULL,
+  id_cliente NUMBER(2) NOT NULL,
+  FOREIGN KEY (id_musica) REFERENCES musica(id_musica),
+  FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente)
+);
+``

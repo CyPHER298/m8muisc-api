@@ -5,7 +5,9 @@ import br.fiap.music.domain.Cantor;
 import br.fiap.music.gateways.CantorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -13,45 +15,63 @@ import java.util.List;
 public class CantorService {
     private final CantorRepository repo;
 
-    private CantorDTO toDTO(Cantor c){
-        return new CantorDTO(c.getId(), c.getNome(), c.getEmail(), c.getSenha());
-    }
-    private void apply(Cantor c, CantorDTO d){
+    private void apply(Cantor c, CantorDTO d) {
         c.setNome(d.nome());
         c.setEmail(d.email());
         c.setSenha(d.senha());
     }
 
-    public CantorDTO create(CantorDTO dto){
+    @Transactional
+    public CantorDTO create(CantorDTO dto) {
         if (repo.existsByEmail(dto.email())) throw new RuntimeException("Email já cadastrado");
-        Cantor c = new Cantor();
-        apply(c, dto);
-        return toDTO(repo.save(c));
+
+        Cantor cantor = new Cantor();
+        cantor.setNome(dto.nome());
+        cantor.setEmail(dto.email());
+        cantor.setSenha(dto.senha());
+        repo.save(cantor);
+
+        return CantorDTO.builder()
+                .nome(cantor.getNome())
+                .email(cantor.getEmail())
+                .senha(cantor.getSenha()).build();
+
     }
 
-    public List<CantorDTO> list(){
-        return repo.findAll().stream().map(this::toDTO).toList();
+    public List<CantorDTO> list() {
+        List<Cantor> cantores = repo.findAll();
+
+        ArrayList<CantorDTO> list = new ArrayList<>();
+
+        cantores.forEach(cantor -> {
+            list.add(CantorDTO.builder()
+                    .id(cantor.getId())
+                    .nome(cantor.getNome())
+                    .email(cantor.getEmail())
+                    .build());
+        });
+
+        return list;
     }
 
-    public CantorDTO get(Long id){
-        return toDTO(getEntity(id));
+    public Cantor get(Long id) {
+        return repo.findById(id).orElse(null);
     }
 
-    public CantorDTO update(Long id, CantorDTO dto){
-        Cantor c = getEntity(id);
-        // Se trocar email, verificar unicidade
-        if(!c.getEmail().equalsIgnoreCase(dto.email()) && repo.existsByEmail(dto.email())){
-            throw new RuntimeException("Email já cadastrado");
-        }
-        apply(c, dto);
-        return toDTO(repo.save(c));
+    public Cantor update(Long id, CantorDTO dto) {
+        Cantor cantor = repo.findById(id).orElse(null);
+        assert cantor != null;
+        cantor.setNome(dto.nome());
+        cantor.setEmail(dto.email());
+        cantor.setSenha(dto.senha());
+        return repo.save(cantor);
     }
 
-    public void delete(Long id){
+    public void delete(Long id) {
         repo.delete(getEntity(id));
     }
 
-    public Cantor getEntity(Long id){
+    public Cantor getEntity(Long id) {
         return repo.findById(id).orElseThrow(() -> new RuntimeException("Cantor não encontrado"));
     }
 }

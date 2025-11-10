@@ -6,4 +6,5 @@ public record PedidoDTO(
         Long id,
         @NotNull Long clienteId,
         @NotNull Long musicaId
-) {}
+) {
+}

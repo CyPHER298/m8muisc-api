@@ -1,12 +1,21 @@
 package br.fiap.music.gateways;
 
+import br.fiap.music.domain.Cantor;
+import br.fiap.music.domain.Cliente;
 import br.fiap.music.gateways.dto.CantorDTO;
+import br.fiap.music.gateways.dto.ClienteDTO;
 import br.fiap.music.service.CantorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/api/cantores")
@@ -14,17 +23,51 @@ import java.util.List;
 public class CantorController {
     private final CantorService service;
 
-    @PostMapping @ResponseStatus(HttpStatus.CREATED)
-    public CantorDTO create(@RequestBody @Valid CantorDTO dto){ return service.create(dto); }
+    @PostMapping
+    public ResponseEntity<EntityModel<CantorDTO>> create(@RequestBody @Valid CantorDTO body) {
 
-    @GetMapping public List<CantorDTO> list(){ return service.list(); }
+        CantorDTO cantor = service.create(body);
 
-    @GetMapping("/{id}") public CantorDTO get(@PathVariable Long id){ return service.get(id); }
+        EntityModel<CantorDTO> entityModel = EntityModel.of(cantor,
+                linkTo(methodOn(CantorController.class).get(cantor.id())).withSelfRel());
 
-    @PutMapping("/{id}") public CantorDTO update(@PathVariable Long id, @RequestBody @Valid CantorDTO dto){
-        return service.update(id, dto);
+        return ResponseEntity.created(entityModel.getRequiredLink("self").toUri())
+                .body(entityModel);
     }
 
-    @DeleteMapping("/{id}") @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long id){ service.delete(id); }
+    @GetMapping
+    public ResponseEntity<EntityModel<List<CantorDTO>>> list() {
+        EntityModel<List<CantorDTO>> response = EntityModel.of(service.list());
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<EntityModel<Cantor>> get(@PathVariable Long id) {
+        Cantor cantor = service.get(id);
+
+        EntityModel<Cantor> cantorModel = EntityModel.of(cantor,
+                linkTo(methodOn(CantorController.class).get(id)).withSelfRel(),
+                linkTo(methodOn(CantorController.class).list()).withRel("lista-cantores"));
+
+        return ResponseEntity.ok(cantorModel);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<EntityModel<Cantor>> update(@PathVariable Long id, @RequestBody @Valid CantorDTO body) {
+        Cantor cantor = service.update(id, body);
+
+        EntityModel<Cantor> cantorModel = EntityModel.of(cantor,
+                linkTo(methodOn(CantorController.class).update(id, null)).withSelfRel(),
+                linkTo(methodOn(CantorController.class).list()).withRel("lista-cantores")
+                );
+
+        return ResponseEntity.ok(cantorModel);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }
