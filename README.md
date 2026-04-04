@@ -196,4 +196,4 @@ CREATE TABLE avaliacao (
   FOREIGN KEY (id_musica) REFERENCES musica(id_musica),
   FOREIGN KEY (id_cliente) REFERENCES cliente(id_cliente)
 );
-``
+```

@@ -1,4 +1,4 @@
-package br.fiap.music.gateways;
+package br.fiap.music.gateways.repository;
 
 import br.fiap.music.domain.Cantor;
 import org.springframework.stereotype.Repository;

@@ -1,4 +1,4 @@
-package br.fiap.music.gateways;
+package br.fiap.music.gateways.repository;
 
 import org.springframework.stereotype.Repository;
 

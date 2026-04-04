@@ -4,7 +4,7 @@ import br.fiap.music.gateways.dto.PedidoDTO;
 import br.fiap.music.domain.Pedido;
 import br.fiap.music.domain.Cliente;
 import br.fiap.music.domain.Musica;
-import br.fiap.music.gateways.PedidoRepository;
+import br.fiap.music.gateways.repository.PedidoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

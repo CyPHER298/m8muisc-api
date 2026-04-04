@@ -2,7 +2,7 @@ package br.fiap.music.service;
 
 import br.fiap.music.gateways.dto.ClienteDTO;
 import br.fiap.music.domain.Cliente;
-import br.fiap.music.gateways.ClienteRepository;
+import br.fiap.music.gateways.repository.ClienteRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

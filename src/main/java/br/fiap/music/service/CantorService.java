@@ -2,7 +2,7 @@ package br.fiap.music.service;
 
 import br.fiap.music.gateways.dto.CantorDTO;
 import br.fiap.music.domain.Cantor;
-import br.fiap.music.gateways.CantorRepository;
+import br.fiap.music.gateways.repository.CantorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

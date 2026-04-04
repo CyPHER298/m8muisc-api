@@ -1,9 +1,8 @@
-package br.fiap.music.gateways;
+package br.fiap.music.gateways.repository;
 
 import org.springframework.stereotype.Repository;
 
 import br.fiap.music.domain.Musica;
-import br.fiap.music.domain.Cantor;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;

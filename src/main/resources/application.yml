@@ -25,6 +25,8 @@ spring:
     console:
       enabled: true
       path: /h2-console
+  flyway:
+    enabled: true
 
 ---
 spring:
@@ -44,6 +46,10 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.OracleDialect
         format_sql: true
+
+  flyway:
+    enabled: true
+
 server:
   port: 8080
 
@@ -56,3 +62,17 @@ management:
   endpoint:
     health:
       show-details: always
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      m8music-api:
+        minimumNumberOfCalls: 4
+        slidingWindowSize: 8
+  retry:
+    instances:
+      m8music-api:
+        exponential-backoff-multiplier: 2
+        enable-exponential-backoff: false
+        wait-duration: 5s
+        max-attempts: 2

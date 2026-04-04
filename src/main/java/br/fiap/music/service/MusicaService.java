@@ -2,7 +2,7 @@ package br.fiap.music.service;
 
 import br.fiap.music.gateways.dto.MusicaDTO;
 import br.fiap.music.domain.Musica;
-import br.fiap.music.gateways.MusicaRepository;
+import br.fiap.music.gateways.repository.MusicaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
