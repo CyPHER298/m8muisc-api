@@ -6,7 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "apí-spotify-token", url = "https://accounts.spotify.com/api/token")
+@FeignClient(name = "spotify-token", url = "https://accounts.spotify.com/api/token")
 public interface TokenSpotifyClient {
 //
 //    @PostMapping(value = "/api/token", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
